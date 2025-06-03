@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b39293a104c393747b0c052d2646b0e7, type: 3}
+  m_Name: SiameseFightingFish
+  m_EditorClassIdentifier: 
+  Name: Siamese Fighting Fish
+  GUID: 06ee48c7-c70d-4633-b894-6049a173f755
+  minSize: 1
+  maxSize: 2
+  baseSellCost: 100
+  prefabPath: Assets/Prefabs/Fish/SiameseFightingFish.prefab
+  rarity: 3
+  environment: 2
+  catchingAreaRadius: 1
+  xSpeed: 1
+  ySpeed: 1
+  xOffset: 1
+  yOffset: 1
+  tempVar: 1
+  followBias: 12
+  cohesiveBias: 12
+  seperationBias: 12
+  alignmentBias: 12
