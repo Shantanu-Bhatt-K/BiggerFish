@@ -14,8 +14,13 @@ public class Aquarium : ScriptableObject
     public float width;
     public float height;
     public float depth;
-    public GameObject modelPrefab;
+    public string prefabPath;
     public int maxDecoration;
+
+    public Aquarium_Data ToAquariumData()
+    {
+        return new Aquarium_Data() { GUID = GUID, Name = Name, maxSpace = maxSpace, width = width, height = height, prefabPath = prefabPath, maxDecoration = maxDecoration };
+    } 
 }
 
 public class Aquarium_Data
@@ -28,4 +33,9 @@ public class Aquarium_Data
     public float depth { get; set; }
     public string prefabPath { get; set; } // prefab path or Addressable key
     public int maxDecoration { get; set; }
+
+    public Aquarium ToAquarium()
+    {
+        return new Aquarium() { GUID = GUID, Name = Name, maxSpace = maxSpace, width = width, depth = depth, height = height, prefabPath = prefabPath, maxDecoration = maxDecoration };
+    }
 }

@@ -3,29 +3,62 @@ using UnityEngine;
 using SQLite;
 using System.IO;
 using System.Collections.Generic;
+using System;
+using Codice.CM.Common;
 
 public static class DatabaseCreator
 {
     [MenuItem("Tools/Generate Game Tables")]
     public static void CreateDatabasetable()
     {
+        
         string dbPath = Path.Combine(Application.dataPath, "StreamingAssets", "game.db");
         Directory.CreateDirectory(Path.GetDirectoryName(dbPath));
         var db = new SQLiteConnection(dbPath);
-        db.Execute("CREATE TABLE IF NOT EXISTS All_Fish (GUID TEXT PRIMARY KEY, Name TEXT, minSize REAL, maxSize REAL, baseSellCost INTEGER, prefabPath TEXT, rarity INTEGER, environment INTEGER, catchingAreaRadius REAL, xSpeed REAL, ySpeed REAL, xOffset REAL, yOffset REAL, tempVar REAL, followBias REAL, cohesiveBias REAL, seperationBias REAL, alignmentBias REAL);");
+        db.Execute("CREATE TABLE IF NOT EXISTS All_Fish (GUID TEXT PRIMARY KEY, Name TEXT, minSize REAL, maxSize REAL, baseSellCost INTEGER, prefabPath TEXT, rarity INTEGER, environment INTEGER, catchingAreaRadius REAL, xSpeed REAL, ySpeed REAL, xOffset REAL, yOffset REAL, spaceRequired INTEGER, followBias REAL, cohesiveBias REAL, seperationBias REAL, alignmentBias REAL);");
         db.Execute("CREATE TABLE IF NOT EXISTS All_Aquarium (GUID TEXT PRIMARY KEY, Name TEXT, maxSpace INTEGER, width REAL, height REAL, depth REAL, prefabPath TEXT, maxDecoration INTEGER);");
-        db.Execute("CREATE TABLE IF NOT EXISTS All_Bait (GUID TEXT PRIMARY KEY, Name TEXT, modifierType TEXT, modifiedRarity INTEGER, sizeModifier REAL, easeModifier REAL, prefabPath TEXT);");
-        db.Execute("CREATE TABLE IF NOT EXISTS All_Decorations (GUID TEXT PRIMARY KEY, Name TEXT, prefabPath TEXT);");
+        db.Execute("CREATE TABLE IF NOT EXISTS All_Bait (GUID TEXT PRIMARY KEY, Name TEXT, modifierType INT, modifiedRarity INTEGER, sizeModifier REAL, easeModifier REAL, prefabPath TEXT, cost INTEGER);");
+        db.Execute("CREATE TABLE IF NOT EXISTS All_Decorations (GUID TEXT PRIMARY KEY, Name TEXT, prefabPath TEXT, isFloating INTEGER);");
 
         Debug.Log("Created Tables");
+    }
+
+    [MenuItem("Tools/Fill Bait Table")]
+    public static void FillBaitTable()
+    {
+        List<Bait> allBait = new List<Bait>();
+        string[] bGuids = AssetDatabase.FindAssets("t:Bait");
+        foreach (string bGuid in bGuids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(bGuid);
+            Bait baitAsset = AssetDatabase.LoadAssetAtPath<Bait>(path);
+            if (baitAsset != null)
+            {
+                allBait.Add(baitAsset);
+            }
+        }
+
+        string dbPath = Path.Combine(Application.dataPath, "StreamingAssets", "game.db");
+        Directory.CreateDirectory(Path.GetDirectoryName(dbPath));
+        var db = new SQLiteConnection(dbPath);
+
+        foreach( Bait bait in allBait )
+        {
+            Bait_Data baitData = bait.ToBaitData();
+            db.Execute("INSERT INTO All_Bait (GUID, Name, modifierType, modifiedRarity, sizeModifier, easeModifier, prefabPath, cost) VALUES(?, ?, ?, ?, ?, ?, ?, ?);",
+                baitData.GUID, baitData.Name, baitData.modifierType, baitData.modifiedRarity, baitData.sizeModifier, baitData.easeModifier, baitData.prefabPath, baitData.cost);
+        }
     }
 
     [MenuItem("Tools/Fill Fish Table")]
     public static void FillFishTable()
     {
         List<Fish> allFish = new List<Fish>();
-        string[] guids = AssetDatabase.FindAssets("t:Fish");
-        foreach (string guid in guids)
+        
+        string[] fGuids = AssetDatabase.FindAssets("t:Fish");
+       
+
+        foreach (string guid in fGuids)
         {
             string path = AssetDatabase.GUIDToAssetPath(guid);
             Fish fishAsset = AssetDatabase.LoadAssetAtPath<Fish>(path);
@@ -34,24 +67,48 @@ public static class DatabaseCreator
                 allFish.Add(fishAsset);
             }
         }
-
+       
         string dbPath = Path.Combine(Application.dataPath, "StreamingAssets", "game.db");
         Directory.CreateDirectory(Path.GetDirectoryName(dbPath));
         var db = new SQLiteConnection(dbPath);
 
         foreach (Fish fish in allFish)
         {
-
-            Fish_Data fish_data = fish.toFishData();
-            string query = $"INSERT INTO All_Fish (GUID, Name, minSize, maxSize, baseSellCost, prefabPath, rarity, environment, catchingAreaRadius, xSpeed, ySpeed, xOffset, yOffset, tempVar, followBias, cohesiveBias, seperationBias, alignmentBias) VALUES ('{fish_data.GUID}', '{fish_data.Name}', '{fish_data.minSize}', '{fish_data.maxSize}', '{fish_data.baseSellCost}', '{fish_data.prefabPath}', '{fish_data.rarity}', '{fish_data.environment}', '{fish_data.catchingAreaRadius}', '{fish_data.xSpeed}', '{fish_data.ySpeed}', '{fish_data.xOffset}', '{fish_data.yOffset}', '{fish_data.tempVar}', '{fish_data.followBias}', '{fish_data.cohesiveBias}', '{fish_data.seperationBias}', '{fish_data.alignmentBias}');";
+            Fish_Data fish_data = fish.ToFishData();
+            string query = $"INSERT INTO All_Fish (GUID, Name, minSize, maxSize, baseSellCost, prefabPath, rarity, environment, catchingAreaRadius, xSpeed, ySpeed, xOffset, yOffset, tempVar, followBias, cohesiveBias, seperationBias, alignmentBias) VALUES ('{fish_data.GUID}', '{fish_data.Name}', '{fish_data.minSize}', '{fish_data.maxSize}', '{fish_data.baseSellCost}', '{fish_data.prefabPath}', '{fish_data.rarity}', '{fish_data.environment}', '{fish_data.catchingAreaRadius}', '{fish_data.xSpeed}', '{fish_data.ySpeed}', '{fish_data.xOffset}', '{fish_data.yOffset}', '{fish_data.spaceRequired}', '{fish_data.followBias}', '{fish_data.cohesiveBias}', '{fish_data.seperationBias}', '{fish_data.alignmentBias}');";
             Debug.Log(query);
-            db.Execute("INSERT INTO All_Fish  (GUID, Name, minSize, maxSize, baseSellCost, prefabPath, rarity, environment, catchingAreaRadius, xSpeed, ySpeed, xOffset, yOffset, tempVar, followBias, cohesiveBias, seperationBias, alignmentBias) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+            db.Execute("INSERT INTO All_Fish  (GUID, Name, minSize, maxSize, baseSellCost, prefabPath, rarity, environment, catchingAreaRadius, xSpeed, ySpeed, xOffset, yOffset, spaceRequired, followBias, cohesiveBias, seperationBias, alignmentBias) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
                 fish_data.GUID, fish_data.Name, fish_data.minSize, fish_data.maxSize, fish_data.baseSellCost,
                 fish_data.prefabPath, fish_data.rarity, fish_data.environment, fish_data.catchingAreaRadius,
-                fish_data.xSpeed, fish_data.ySpeed, fish_data.xOffset, fish_data.yOffset, fish_data.tempVar,
+                fish_data.xSpeed, fish_data.ySpeed, fish_data.xOffset, fish_data.yOffset, fish_data.spaceRequired,
                 fish_data.followBias, fish_data.cohesiveBias, fish_data.seperationBias, fish_data.alignmentBias);
-            }
+        }
 
+    }
+
+    [MenuItem("Tools/Fill DecorationTable")]
+    public static void FillDecorationTable()
+    {
+        List<Decoration> allDecorations = new List<Decoration>();
+        string[] dGuids = AssetDatabase.FindAssets("t:Decoration"); 
+        foreach (string dguid in dGuids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(dguid);
+            Decoration decorationAsset = AssetDatabase.LoadAssetAtPath<Decoration>(path);
+            if (decorationAsset != null)
+            {
+                allDecorations.Add(decorationAsset);
+            }
+        }
+        string dbPath = Path.Combine(Application.dataPath, "StreamingAssets", "game.db");
+        Directory.CreateDirectory(Path.GetDirectoryName(dbPath));
+        var db = new SQLiteConnection(dbPath);
+        foreach (Decoration decoration in allDecorations)
+        {
+            Decoration_Data dData = decoration.ToDecorationData();
+            db.Execute("INSERT INTO All_Decorations(GUID, Name, prefabPath, isFloating)VALUES(?,?,?,?)", dData.GUID, dData.Name, dData.prefabPath, dData.isFloating);
+
+        }
     }
     [MenuItem("Tools/get Fish Table")]
     public static void GetFishTable()
@@ -67,4 +124,106 @@ public static class DatabaseCreator
             Debug.Log(fish.Name);
         }
     }
+
+    [MenuItem("Tools/ Fill Aquarium Table")]
+    public static void FillAquarium() {
+        List<Aquarium> allAquarium = new List<Aquarium>();
+        string[] aGuids = AssetDatabase.FindAssets("t:Aquarium");
+        foreach (string aguid in aGuids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(aguid);
+            Aquarium decorationAsset = AssetDatabase.LoadAssetAtPath<Aquarium>(path);
+            if (decorationAsset != null)
+            {
+                allAquarium.Add(decorationAsset);
+            }
+        }
+        string dbPath = Path.Combine(Application.dataPath, "StreamingAssets", "game.db");
+        Directory.CreateDirectory(Path.GetDirectoryName(dbPath));
+        var db = new SQLiteConnection(dbPath);
+        foreach (Aquarium aquarium in allAquarium)
+        {
+            Aquarium_Data aData = aquarium.ToAquariumData();
+            db.Execute("INSERT INTO All_Aquarium(GUID, Name, maxSpace, width, height, depth, prefabPath, maxDecoration)VALUES(?,?,?,?,?,?,?,?)", aData.GUID, aData.Name, aData.maxSpace, aData.width, aData.height, aData.depth, aData.prefabPath, aData.maxDecoration);
+
+        }
+    }
+
+
+    /////////////////////////////////////////////// Create player Inventory Tables ////////////////////////////////////////////
+
+    
+
+    [MenuItem("Tools/Create Player Inventory Table")]
+    public static void  CreatePlayerTables()
+    {
+        SQLitePCL.Batteries_V2.Init();
+        string pDBPath = Path.Combine(Application.persistentDataPath, "Database", "data.DB");
+        Debug.Log(pDBPath);
+        Directory.CreateDirectory(Path.GetDirectoryName(pDBPath));
+        var connectionString = new SQLiteConnectionString(pDBPath, storeDateTimeAsTicks: true, key: "super_secure_password");
+        var persistentDB = new SQLiteConnection(connectionString);
+        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Inventory_Fish(ID INTEGER PRIMARY KEY AUTOINCREMENT, fish_GUID TEXT, size REAL);");
+        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Inventory_Bait(ID INTEGER PRIMARY KEY AUTOINCREMENT, bait_GUID TEXT, amount INTEGER);");
+        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Inventory_Decoration(ID INTEGER PRIMARY KEY AUTOINCREMENT, decoration_GUID TEXT, amount INTEGER );");
+        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Inventory_Aquarium(ID INTEGER PRIMARY KEY AUTOINCREMENT, aquarium_GUID TEXT, currentFish INTEGER, currentDecoration INTEGER);");
+        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Aquarium_Fish(ID INTEGER PRIMARY KEY AUTOINCREMENT, fish_GUID TEXT, aquarium_ID INT);");
+        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Aquarium_Decoration(ID INTEGER PRIMARY KEY AUTOINCREMENT, decoration_GUID TEXT, aquarium_ID INT, xPos REAL, yPos REAL, zPos REAL, xRot REAL, yROT REAL, zROT REAL);");
+        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Player_Stats(ID INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, value INTEGER);");
+    }
+}
+
+
+public class InventoryFish
+{
+    public int ID {  get; set; }
+    public string Fish_GUID {  get; set; } 
+    public float size { get; set; }    
+}
+
+public class InventoryBait
+{
+    public int ID { get; set; }
+
+    public string Bait_GUID {  get; set; }
+    public int amount { get; set;}
+}
+public class InventoryDecoration
+{
+    public int ID { get; set; }
+    public string Decoration_GUID { get; set; }
+    public int amount { get; set; }
+}
+public class InventoryAquarium
+{
+    public int ID { get; set; }
+    public string Aquarium_GUID { get;set; }
+    public int currentFish {  get; set; }
+    public int currentDecoration {  get; set; }
+}
+public class AquariumFish
+{
+    public int ID { get; set; }
+    public string fish_GUID { get; set; }
+    public string aquarium_ID { get; set; }
+
+}
+public class AquariumDecoration
+{
+    public int ID { get; set; }
+    public string decoration_GUID { get; set; } 
+    public int aquarium_ID { get; set; }
+    public float xPos { get; set; }
+    public float yPos { get; set; }
+    public float zPos { get; set; }
+    public float xRot { get; set; }
+    public float yRot { get; set; }
+    public float zRot { get; set; }
+}
+
+public class PlayerStats
+{
+    public int ID { get; set; }
+    public string name { get; set; }
+    public int amount { get; set; }
 }

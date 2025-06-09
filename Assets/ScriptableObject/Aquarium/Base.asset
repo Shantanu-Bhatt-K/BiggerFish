@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d5a18bfd834d7f47a3fcccb814bd55c, type: 3}
-  m_Name: Aquarium
+  m_Name: Base
   m_EditorClassIdentifier: 
-  GUID: 1ea04792-799c-45f1-b5e6-35add4379077
-  Name: 
-  maxSpace: 0
-  width: 0
-  height: 0
-  depth: 0
-  modelPrefab: {fileID: 0}
-  maxDecoration: 0
+  GUID: a565254a-90c2-4bf7-a8ac-0a889c9e9ff6
+  Name: Base
+  maxSpace: 20
+  width: 20
+  height: 30
+  depth: 40
+  prefabPath: Assets/Prefabs/Aquarium/BaseAquarium.prefab
+  maxDecoration: 10

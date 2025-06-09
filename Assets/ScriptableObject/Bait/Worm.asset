@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38f9f5e30f40a9e4985b9446d6b277ff, type: 3}
+  m_Name: Worm
+  m_EditorClassIdentifier: 
+  GUID: 49e49b66-cfbe-48b7-98f6-5a384bc12baf
+  Name: Worm
+  modifierType: 0
+  modifiedRarity: 0
+  sizeModifier: 0
+  easeModifier: 0
+  prefabPath: Assets/Prefabs/Bait/Worm.prefab

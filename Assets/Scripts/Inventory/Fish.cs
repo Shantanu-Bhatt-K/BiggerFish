@@ -31,8 +31,8 @@ public class Fish : ScriptableObject
     {
         GUID = System.Guid.NewGuid().ToString();
     }
-    public float minSize;
-    public float maxSize;
+    public float minSize;//length multiplier
+    public float maxSize;//length multiplier
     public int baseSellCost;
     public string prefabPath;
     public fishRarity rarity;
@@ -49,33 +49,36 @@ public class Fish : ScriptableObject
 
     [Header("Aquarium Variables")]
 
-    public float tempVar;
+    public int spaceRequired;
     public float followBias;
     public float cohesiveBias;
     public float seperationBias;
     public float alignmentBias;
+    
 
-    public Fish_Data toFishData()
+    public Fish_Data ToFishData()
     {
-        Fish_Data retFish= new Fish_Data();
-        retFish.Name = Name;
-        retFish.GUID = GUID;
-        retFish.minSize = minSize;
-        retFish.maxSize = maxSize;
-        retFish.baseSellCost = baseSellCost;
-        retFish.prefabPath = prefabPath;
-        retFish.rarity = (int)rarity;
-        retFish.environment = (int)environment;
-        retFish.catchingAreaRadius = catchingAreaRadius;
-        retFish.xSpeed = xSpeed;
-        retFish.ySpeed = ySpeed;
-        retFish.xOffset = xOffset;
-        retFish.yOffset = yOffset;
-        retFish.tempVar = tempVar;
-        retFish.followBias = followBias;
-        retFish.cohesiveBias = cohesiveBias;
-        retFish.seperationBias = seperationBias;
-        retFish.alignmentBias = alignmentBias;
+        Fish_Data retFish = new()
+        {
+            Name = Name,
+            GUID = GUID,
+            minSize = minSize,
+            maxSize = maxSize,
+            baseSellCost = baseSellCost,
+            prefabPath = prefabPath,
+            rarity = (int)rarity,
+            environment = (int)environment,
+            catchingAreaRadius = catchingAreaRadius,
+            xSpeed = xSpeed,
+            ySpeed = ySpeed,
+            xOffset = xOffset,
+            yOffset = yOffset,
+            spaceRequired = spaceRequired,
+            followBias = followBias,
+            cohesiveBias = cohesiveBias,
+            seperationBias = seperationBias,
+            alignmentBias = alignmentBias
+        };
         return retFish;
     }
 }
@@ -96,32 +99,34 @@ public class Fish_Data
     public float ySpeed { get; set; }
     public float xOffset { get; set; }
     public float yOffset { get; set; }
-    public float tempVar { get; set; }
+    public int spaceRequired { get; set; }
     public float followBias { get; set; }
     public float cohesiveBias { get; set; }
     public float seperationBias { get; set; }
     public float alignmentBias { get; set; }
-    public Fish toFish()
+    public Fish ToFish()
     {
-        Fish retFish = new Fish();
-        retFish.Name = Name;
-        retFish.GUID = GUID;
-        retFish.minSize = minSize;
-        retFish.maxSize = maxSize;
-        retFish.baseSellCost = baseSellCost;
-        retFish.prefabPath = prefabPath;
-        retFish.rarity = (fishRarity)rarity;
-        retFish.environment = (Environment)environment;
-        retFish.catchingAreaRadius = catchingAreaRadius;
-        retFish.xSpeed = xSpeed;
-        retFish.ySpeed = ySpeed;
-        retFish.xOffset = xOffset;
-        retFish.yOffset = yOffset;
-        retFish.tempVar = tempVar;
-        retFish.followBias = followBias;
-        retFish.cohesiveBias = cohesiveBias;
-        retFish.seperationBias = seperationBias;
-        retFish.alignmentBias = alignmentBias;
+        Fish retFish = new()
+        {
+            Name = Name,
+            GUID = GUID,
+            minSize = minSize,
+            maxSize = maxSize,
+            baseSellCost = baseSellCost,
+            prefabPath = prefabPath,
+            rarity = (fishRarity)rarity,
+            environment = (Environment)environment,
+            catchingAreaRadius = catchingAreaRadius,
+            xSpeed = xSpeed,
+            ySpeed = ySpeed,
+            xOffset = xOffset,
+            yOffset = yOffset,
+            spaceRequired = spaceRequired,
+            followBias = followBias,
+            cohesiveBias = cohesiveBias,
+            seperationBias = seperationBias,
+            alignmentBias = alignmentBias
+        };
         return retFish;
     }
 }

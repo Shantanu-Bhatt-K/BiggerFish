@@ -15,8 +15,23 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 2aa9d7831ec1aeb4d94f29fe44989661
   m_SerializeEntries:
+  - m_GUID: 10d1b479b10b55a48854ae57b0a88b13
+    m_Address: Assets/Prefabs/Aquarium/BaseAquarium.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 22becc2543358fd4694954848935578f
+    m_Address: Assets/Prefabs/Bait/Worm.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 54afd32ef7310b64a99e99f0d5753cab
     m_Address: Assets/Prefabs/Fish/SiameseFightingFish.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe7d3a25520e25041a02fb2604784cae
+    m_Address: Assets/Prefabs/Coral/Coral.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
