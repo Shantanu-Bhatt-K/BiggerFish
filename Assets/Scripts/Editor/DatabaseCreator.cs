@@ -16,7 +16,7 @@ public static class DatabaseCreator
         Directory.CreateDirectory(Path.GetDirectoryName(dbPath));
         var db = new SQLiteConnection(dbPath);
         db.Execute("CREATE TABLE IF NOT EXISTS All_Fish (GUID TEXT PRIMARY KEY, Name TEXT, minSize REAL, maxSize REAL, baseSellCost INTEGER, prefabPath TEXT, rarity INTEGER, environment INTEGER, catchingAreaRadius REAL, xSpeed REAL, ySpeed REAL, xOffset REAL, yOffset REAL, spaceRequired INTEGER, followBias REAL, cohesiveBias REAL, seperationBias REAL, alignmentBias REAL);");
-        db.Execute("CREATE TABLE IF NOT EXISTS All_Aquarium (GUID TEXT PRIMARY KEY, Name TEXT, maxSpace INTEGER, width REAL, height REAL, depth REAL, prefabPath TEXT, maxDecoration INTEGER);");
+        db.Execute("CREATE TABLE IF NOT EXISTS All_Aquarium (GUID TEXT PRIMARY KEY, Name TEXT, maxSpace INTEGER, width REAL, height REAL, depth REAL, prefabPath TEXT, maxDecoration INTEGER,  cost INTEGER);");
         db.Execute("CREATE TABLE IF NOT EXISTS All_Bait (GUID TEXT PRIMARY KEY, Name TEXT, modifierType INT, modifiedRarity INTEGER, sizeModifier REAL, easeModifier REAL, prefabPath TEXT, cost INTEGER);");
         db.Execute("CREATE TABLE IF NOT EXISTS All_Decorations (GUID TEXT PRIMARY KEY, Name TEXT, prefabPath TEXT, isFloating INTEGER);");
 
@@ -164,66 +164,13 @@ public static class DatabaseCreator
         var connectionString = new SQLiteConnectionString(pDBPath, storeDateTimeAsTicks: true, key: "super_secure_password");
         var persistentDB = new SQLiteConnection(connectionString);
         persistentDB.Execute("CREATE TABLE IF NOT EXISTS Inventory_Fish(ID INTEGER PRIMARY KEY AUTOINCREMENT, fish_GUID TEXT, size REAL);");
-        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Inventory_Bait(ID INTEGER PRIMARY KEY AUTOINCREMENT, bait_GUID TEXT, amount INTEGER);");
-        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Inventory_Decoration(ID INTEGER PRIMARY KEY AUTOINCREMENT, decoration_GUID TEXT, amount INTEGER );");
+        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Inventory_Bait(bait_GUID TEXT PRIMARY KEY , amount INTEGER);");
+        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Inventory_Decoration(decoration_GUID TEXT PRIMARY KEY, amount INTEGER );");
         persistentDB.Execute("CREATE TABLE IF NOT EXISTS Inventory_Aquarium(ID INTEGER PRIMARY KEY AUTOINCREMENT, aquarium_GUID TEXT, currentFish INTEGER, currentDecoration INTEGER);");
-        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Aquarium_Fish(ID INTEGER PRIMARY KEY AUTOINCREMENT, fish_GUID TEXT, aquarium_ID INT);");
-        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Aquarium_Decoration(ID INTEGER PRIMARY KEY AUTOINCREMENT, decoration_GUID TEXT, aquarium_ID INT, xPos REAL, yPos REAL, zPos REAL, xRot REAL, yROT REAL, zROT REAL);");
-        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Player_Stats(ID INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, value INTEGER);");
+        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Aquarium_Fish(ID INTEGER PRIMARY KEY AUTOINCREMENT, fish_GUID TEXT, aquarium_ID INT, size REAL);");
+        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Aquarium_Decoration(ID INTEGER PRIMARY KEY AUTOINCREMENT, decoration_GUID TEXT, aquarium_ID INT, xPos REAL, yPos REAL, zPos REAL, xRot REAL, yRot REAL, zRot REAL);");
+        persistentDB.Execute("CREATE TABLE IF NOT EXISTS Player_Stats(name TEXT PRIMARY KEY, value INTEGER);");
     }
 }
 
 
-public class InventoryFish
-{
-    public int ID {  get; set; }
-    public string Fish_GUID {  get; set; } 
-    public float size { get; set; }    
-}
-
-public class InventoryBait
-{
-    public int ID { get; set; }
-
-    public string Bait_GUID {  get; set; }
-    public int amount { get; set;}
-}
-public class InventoryDecoration
-{
-    public int ID { get; set; }
-    public string Decoration_GUID { get; set; }
-    public int amount { get; set; }
-}
-public class InventoryAquarium
-{
-    public int ID { get; set; }
-    public string Aquarium_GUID { get;set; }
-    public int currentFish {  get; set; }
-    public int currentDecoration {  get; set; }
-}
-public class AquariumFish
-{
-    public int ID { get; set; }
-    public string fish_GUID { get; set; }
-    public string aquarium_ID { get; set; }
-
-}
-public class AquariumDecoration
-{
-    public int ID { get; set; }
-    public string decoration_GUID { get; set; } 
-    public int aquarium_ID { get; set; }
-    public float xPos { get; set; }
-    public float yPos { get; set; }
-    public float zPos { get; set; }
-    public float xRot { get; set; }
-    public float yRot { get; set; }
-    public float zRot { get; set; }
-}
-
-public class PlayerStats
-{
-    public int ID { get; set; }
-    public string name { get; set; }
-    public int amount { get; set; }
-}
