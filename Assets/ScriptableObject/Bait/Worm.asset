@@ -15,7 +15,10 @@ MonoBehaviour:
   GUID: 49e49b66-cfbe-48b7-98f6-5a384bc12baf
   Name: Worm
   modifierType: 0
-  modifiedRarity: 0
+  modifiedRarity: 2
+  rarityModifier: 0
   sizeModifier: 0
   easeModifier: 0
   prefabPath: Assets/Prefabs/Bait/Worm.prefab
+  bestEnvironment: 0
+  cost: 0

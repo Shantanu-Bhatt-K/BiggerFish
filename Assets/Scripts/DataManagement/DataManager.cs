@@ -347,21 +347,17 @@ public class DataManager : MonoBehaviour
     {
         try
         {
-            // 1️⃣ Get the fish before deleting anything
             List<AquariumFish> aquariumFishes = GetAquariumFish(aquarium.ID);
             List<AquariumDecoration> aquariumDecorations = GetAquariumDecorations(aquarium.ID);
 
-            // 2️⃣ Begin a transaction
             persistentDB.RunInTransaction(() =>
             {
-                // 3️⃣ Delete aquarium and its fish
                 persistentDB.Execute("DELETE FROM Inventory_Aquarium WHERE ID = ?;", aquarium.ID);
                 persistentDB.Execute("DELETE FROM Aquarium_Fish WHERE Aquarium_ID = ?;", aquarium.ID);
                 persistentDB.Execute("DELETE FROM Aquarium_Decoration WHERE Aquarium_ID = ?;", aquarium.ID);
 
                 Debug.Log($"Removed Aquarium and its fish and decoration for aquarium ID = {aquarium.ID}");
 
-                // 4️⃣ Move fish to inventory
                 foreach (AquariumFish aquariumFish in aquariumFishes)
                 {
                     persistentDB.Execute(
@@ -397,7 +393,7 @@ public class DataManager : MonoBehaviour
     }
     ////////////////////////////////////////////// Player Stats Update ////////////////////////////////////////////////////////////
     
-    public void   AddPlayerStats(string Item, int amount)
+    public void AddPlayerStats(string Item, int amount)
     {
         try
         {
@@ -522,7 +518,7 @@ public class DataManager : MonoBehaviour
         try
         {
             List<AquariumDecoration> aquariumDecoration = persistentDB.Query<AquariumDecoration>("SELECT * FROM Aquarium_Decoration WHERE Aquarium_ID = ?", aquariumID);
-            Debug.Log($"Fetched Fishes for aquarium = {aquariumID}");
+            Debug.Log($"Fetched Decoration for aquarium = {aquariumID}");
             return aquariumDecoration;
         }
         catch (Exception e)

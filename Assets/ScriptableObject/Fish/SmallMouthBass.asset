@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b39293a104c393747b0c052d2646b0e7, type: 3}
+  m_Name: SmallMouthBass
+  m_EditorClassIdentifier: 
+  Name: Small Mouth Bass
+  GUID: 69954c68-2307-4a94-b888-e7d277ff530b
+  minSize: 0.4
+  maxSize: 0.5
+  baseSellCost: 200
+  prefabPath: Assets/Prefabs/Fish/SmallMouthBass.prefab
+  rarity: 1
+  environment: 0
+  catchingAreaRadius: 0
+  xSpeed: 0
+  ySpeed: 0
+  xOffset: 0
+  yOffset: 0
+  spaceRequired: 0
+  followBias: 0
+  cohesiveBias: 0
+  seperationBias: 0
+  alignmentBias: 0

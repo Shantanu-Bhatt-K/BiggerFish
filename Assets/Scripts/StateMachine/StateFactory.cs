@@ -1,74 +1,63 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class StateFactory 
 {
-    StateMachine context;
-
-    public StateFactory (StateMachine _context)
+    DiContainer container;
+   
+   public static SceneContext GetCurrentSceneContext()
     {
-        context = _context;
-    }
-    public BaseState Menu(Dictionary<string, object> _data) 
-    {
-        return new MenuState(context, this, _data);
-    }
-    public BaseState MainMenu(Dictionary<string, object> _data)
-    {
-        return new MainMenuState(context, this, _data);
-    }
-    public BaseState SettingsMenu(Dictionary<string, object> _data)
-    {
-        return new SettingsMenuState(context, this, _data);
-    }
-    public BaseState PlayMenu(Dictionary<string, object> _data)
-    {
-        return new PlayMenuState(context, this, _data);
-    }
-    public BaseState Aquarium(Dictionary<string, object> _data)
-    {
-        return new AquariumState(context, this, _data);
+        var sceneContext = Object.FindAnyObjectByType<SceneContext>();
+        if (sceneContext == null)
+        {
+            Debug.LogError("No SceneContext found in the current scene!");
+            return null;
+        }
+        return sceneContext;
     }
 
-    public BaseState Shopping(Dictionary<string, object> _data) 
+    public static DiContainer GetCurrentSceneContainer()
     {
-        return new ShoppingState(context, this, _data);
-    }
-    public BaseState Fishing(Dictionary<string, object> _data) 
-    {
-        return new FishingState(context, this, _data);
-    }
-    public BaseState AreaSelect(Dictionary<string, object> _data) 
-    {
-        return new AreaSelectState(context, this, _data);
-    }
-    public BaseState FishingIdle(Dictionary<string, object> _data) 
-    {
-        return new FishingIdleState(context, this, _data);
-    }
-    public BaseState AquariumIdle(Dictionary<string, object> _data)
-    {
-        return new AquariumIdleState(context, this, _data);
-    }
-    public BaseState LineThrown(Dictionary<string, object> _data) 
-    {
-        return new LineThrowState(context, this, _data);
-    }
-    public BaseState BaitSelect(Dictionary<string, object> _data) 
-    {
-        return new BaitSelectState(context, this, _data);
-    }
-    public BaseState Bobbing(Dictionary<string, object> _data) 
-    {
-        return new BobbingState(context, this, _data);
-    }
-    public BaseState Minigame(Dictionary<string, object> _data) 
-    {
-        return new MinigameState(context, this, _data);
-    }
-    public BaseState Result(Dictionary<string, object> _data) 
-    {
-        return new ResultState(context, this, _data);
+        var context = GetCurrentSceneContext();
+        return context != null ? context.Container : null;
     }
 
+    public StateFactory(DiContainer container)
+    {
+        this.container = container;
+    }
+
+    ///////////////////////////////////////////////// Global States /////////////////////////////////////////////////
+    public BaseState Menu()
+    {
+        return container.Instantiate<MenuState>();
+    }
+    
+    public BaseState OverworldState()
+    {
+        return container.Instantiate<OverworldState>();
+    }
+//////////////////////////////////////////////// Menu Scene States /////////////////////////////////////////////////
+    public BaseState MainMenuState()
+    {
+        return GetCurrentSceneContainer().Instantiate<MainMenuState>();
+    }
+
+
+    public BaseState SettingsMenuState()
+    {
+        return GetCurrentSceneContainer().Instantiate<SettingsMenuState>();
+    }
+///////////////////////////////////////////////// Overworld Scene States /////////////////////////////////////////////////
+    public BaseState PlayerControlState()
+    {
+        return GetCurrentSceneContainer().Instantiate<PlayerControlState>();
+    }
+    public BaseState PlayerPromptState(Dictionary<string,object> args)
+    {
+        var state = GetCurrentSceneContainer().Instantiate<PlayerPromptState>();
+        state.setArgs(args); // ✅ Pass data here
+        return state;
+    }
 }

@@ -9,15 +9,18 @@ public abstract class BaseState
     protected Dictionary<string, object> data = new Dictionary<string, object>();
     protected BaseState superState;
     protected BaseState subState;
-    protected bool isRootState = false; 
+    protected bool isRootState = false;
 
-    public BaseState(StateMachine _context, StateFactory _stateFactory, Dictionary<string, object> _data)
+    public BaseState(StateMachine _context, StateFactory _stateFactory)
     {
         context = _context;
         stateFactory = _stateFactory;
-        data = _data;
     }
 
+    public void setArgs(Dictionary<string, object> _data)
+    {
+        data = _data;
+    }   
     public abstract void EnterState();
     public abstract void ExitState();
     public abstract void UpdateState();
@@ -40,30 +43,48 @@ public abstract class BaseState
             subState.ExitStates();
         }
     }
-    protected void SwitchState(BaseState _newState) 
+    protected void SwitchState(BaseState _newState)
     {
-        Debug.Log("isRootState");
+        Debug.Log("Switching State to " + _newState.GetType().Name);
         ExitStates();
         _newState.EnterState();
-        if(isRootState)
+        if (isRootState)
         {
             Debug.Log("isRootState");
             context.CurrentState = _newState;
         }
-        else if(superState != null)
+        else if (superState != null)
         {
             Debug.Log("isNotRootState");
             superState.SetSubState(_newState);
         }
-        
+
+    }
+    
+    protected void SwitchRootState(BaseState newRootState)
+    {
+        BaseState root = GetRootState();
+        root.ExitStates();
+        newRootState.EnterState();
+        root.context.CurrentState = newRootState;
     }
     protected void SetSuperState(BaseState _newSuperState) 
     {
         superState = _newSuperState;
     }
-    protected void SetSubState(BaseState _newSubState) 
+    protected void SetSubState(BaseState _newSubState)
     {
         subState = _newSubState;
         subState.SetSuperState(this);
+    }
+    
+    protected BaseState GetRootState()
+    {
+        BaseState root = this;
+        while (root.superState != null)
+        {
+            root = root.superState;
+        }
+        return root;
     }
 }

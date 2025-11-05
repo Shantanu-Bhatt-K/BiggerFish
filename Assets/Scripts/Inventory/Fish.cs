@@ -2,8 +2,9 @@ using SQLite;
 using UnityEngine;
 
 
-public enum fishRarity
+public enum FishRarity
 {
+    NA, //for testing and fish bait
     Common, //93.15%
     Uncommon,//4.50%
     Rare, //1.50%
@@ -13,11 +14,11 @@ public enum fishRarity
 
 public enum Environment
 {
-    WaterFall,
-    River,
     Pond,
     Lake,
-    Sea
+    River,
+    Reef,
+    Ocean
 }
 [CreateAssetMenu(fileName = "Fish", menuName = "ScriptableObjects/Fish", order = 1)]
 public class Fish : ScriptableObject
@@ -35,7 +36,7 @@ public class Fish : ScriptableObject
     public float maxSize;//length multiplier
     public int baseSellCost;
     public string prefabPath;
-    public fishRarity rarity;
+    public FishRarity rarity;
 
     [Header("Catching Variables")]
     public Environment environment;
@@ -54,7 +55,7 @@ public class Fish : ScriptableObject
     public float cohesiveBias;
     public float seperationBias;
     public float alignmentBias;
-    
+    public float maxSpeed;
 
     public Fish_Data ToFishData()
     {
@@ -77,7 +78,8 @@ public class Fish : ScriptableObject
             followBias = followBias,
             cohesiveBias = cohesiveBias,
             seperationBias = seperationBias,
-            alignmentBias = alignmentBias
+            alignmentBias = alignmentBias,
+            maxSpeed = maxSpeed
         };
         return retFish;
     }
@@ -104,6 +106,7 @@ public class Fish_Data
     public float cohesiveBias { get; set; }
     public float seperationBias { get; set; }
     public float alignmentBias { get; set; }
+    public float maxSpeed { get; set; }
     public Fish ToFish()
     {
         Fish retFish = new()
@@ -114,7 +117,7 @@ public class Fish_Data
             maxSize = maxSize,
             baseSellCost = baseSellCost,
             prefabPath = prefabPath,
-            rarity = (fishRarity)rarity,
+            rarity = (FishRarity)rarity,
             environment = (Environment)environment,
             catchingAreaRadius = catchingAreaRadius,
             xSpeed = xSpeed,
@@ -125,7 +128,8 @@ public class Fish_Data
             followBias = followBias,
             cohesiveBias = cohesiveBias,
             seperationBias = seperationBias,
-            alignmentBias = alignmentBias
+            alignmentBias = alignmentBias,
+            maxSpeed = maxSpeed
         };
         return retFish;
     }

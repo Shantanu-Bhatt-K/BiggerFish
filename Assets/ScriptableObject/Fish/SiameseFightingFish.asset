@@ -19,13 +19,13 @@ MonoBehaviour:
   baseSellCost: 100
   prefabPath: Assets/Prefabs/Fish/SiameseFightingFish.prefab
   rarity: 3
-  environment: 2
+  environment: 0
   catchingAreaRadius: 1
   xSpeed: 1
   ySpeed: 1
   xOffset: 1
   yOffset: 1
-  tempVar: 1
+  spaceRequired: 0
   followBias: 12
   cohesiveBias: 12
   seperationBias: 12
