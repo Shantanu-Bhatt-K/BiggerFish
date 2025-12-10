@@ -33,17 +33,22 @@ public class StateFactory
     {
         return container.Instantiate<MenuState>();
     }
-    
+
     public BaseState OverworldState()
     {
         return container.Instantiate<OverworldState>();
     }
-//////////////////////////////////////////////// Menu Scene States /////////////////////////////////////////////////
+     public BaseState HouseState()
+    {
+        return container.Instantiate<HouseState>();
+    }
+    //////////////////////////////////////////////// Menu Scene States /////////////////////////////////////////////////
     public BaseState MainMenuState()
     {
         return GetCurrentSceneContainer().Instantiate<MainMenuState>();
     }
 
+   
 
     public BaseState SettingsMenuState()
     {
@@ -54,10 +59,20 @@ public class StateFactory
     {
         return GetCurrentSceneContainer().Instantiate<PlayerControlState>();
     }
-    public BaseState PlayerPromptState(Dictionary<string,object> args)
+    public BaseState PlayerPromptState(Dictionary<string, object> args)
     {
         var state = GetCurrentSceneContainer().Instantiate<PlayerPromptState>();
         state.setArgs(args); // ✅ Pass data here
         return state;
+    }
+    
+    public BaseState HomeControlState()
+    {
+        return GetCurrentSceneContainer().Instantiate<HomeControlState>();
+    }
+
+    internal BaseState HomePromptState(Dictionary<string, object> dictionary)
+    {
+        return GetCurrentSceneContainer().Instantiate<HomePromptState>();
     }
 }

@@ -23,9 +23,9 @@ public class ProjectInstaller : MonoInstaller
     private void BindRootStates()
     {
         Container.Bind<MenuState>().AsTransient();
-        // Container.Bind<OverworldState>().AsTransient();
+        //Container.Bind<OverworldState>().AsTransient();
         // Container.Bind<FishingState>().AsTransient();
-        // Container.Bind<HomeState>().AsTransient();
+        Container.Bind<HouseState>().AsTransient();
         // Container.Bind<AquariumState>().AsTransient();
     }
 

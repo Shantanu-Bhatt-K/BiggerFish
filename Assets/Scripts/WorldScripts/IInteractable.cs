@@ -6,6 +6,7 @@ public enum InteractableType
     FishShop,
     BaitShop,
     Pond,
+    AquariumShelf,
 }
 public interface IIinteractable
 {

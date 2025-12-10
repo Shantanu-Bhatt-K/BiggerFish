@@ -34,6 +34,15 @@ public class PlayerPromptState : BaseState
         if (Input.GetKeyDown(interactable.InteractKey))
         {
             Debug.Log("Interacted with " + interactable.InteractableType);
+            switch(interactable.InteractableType)
+            {
+                case InteractableType.House:
+                    SwitchState(stateFactory.HouseState());
+                    break;
+                default:
+                    Debug.Log("No interaction defined for this type.");
+                    break;
+            }
         }
     }
     void GatherInput()

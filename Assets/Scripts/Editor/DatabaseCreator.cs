@@ -131,7 +131,7 @@ public static class DatabaseCreator
         }
         Debug.Log("Filled Decoration Table");
     }
-    [MenuItem("Tools/get Fish Table")]
+    [MenuItem("Tools/Get Fish Table")]
     public static void GetFishTable()
     {
         string dbPath = Path.Combine(Application.dataPath, "StreamingAssets", "game.db");
